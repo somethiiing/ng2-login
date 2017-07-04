@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService} from '../services';
 
 @Component({
   selector: 'actual-stuff',
@@ -7,8 +8,15 @@ import { Component } from '@angular/core';
     <div>
       REAL IMPORTANT THINGS
     </div>
+    <button (click)="signout()">Sign Out!!!</button>
   `,
   styles: ['']
 })
 
-export class ActualStuff {}
+export class ActualStuff {
+  constructor(private auth: AuthService) { }
+
+  signout() {
+    this.auth.signout();
+  }
+}

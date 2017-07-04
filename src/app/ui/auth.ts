@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'auth',
@@ -8,6 +9,7 @@ import { AuthService } from '../services';
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
             <p id="profile-name" class="profile-name-card"></p>
+            <div>{{errorMessage}}</div>
             <form class="form-signin" (submit)="onSubmit()">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input
@@ -44,11 +46,15 @@ export class Auth {
     password: ''
   }
 
+  errorMessage = '';
   mode = 'Sign In!';
   modePath= 'signin';
   modeText = 'Don\'t have an account?';
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
   toggleMode() {
     if (this.mode === 'Sign Up!') {
@@ -56,16 +62,23 @@ export class Auth {
       this.mode = 'Sign In!';
       this.modeText = 'Don\'t have an account?';
     } else {
-      this.modePath = 'signin';
+      this.modePath = 'signup';
       this.mode = 'Sign Up!';
       this.modeText = 'Already have an account?';
     }
   }
 
   onSubmit() {
-    console.log(this.user);
     this.auth.authenticate(this.modePath, this.user)
-      .subscribe(data => console.log(data) );
+      .subscribe(data => {
+        if (data === 'USERORPWNOTCORRECT') {
+          this.errorMessage = 'Email or password is incorrect. Please try again!';
+        } else if (data === 'USEREXISTS') {
+          this.errorMessage = 'User already exists!';
+        } else {
+          this.router.navigate(['']);
+        }
+      });
   }
 }
 
