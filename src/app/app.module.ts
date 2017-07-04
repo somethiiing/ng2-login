@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { ApiService, AuthService } from './services';
 import { Auth, ActualStuff } from './ui';
 import { routes } from './routes';
 
@@ -21,7 +22,10 @@ import { routes } from './routes';
     HttpModule,
     routes
   ],
-  providers: [],
+  providers: [
+    ApiService,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

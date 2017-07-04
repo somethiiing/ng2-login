@@ -32,10 +32,12 @@ export class ApiService {
     return this.http.post(`${this.api_url}${path}`, JSON.stringify(data), {headers: this.headers})
       .map(this.checkForError)
       .catch(err => Observable.throw(err))
-      .map(this.getJson)
+      .map(this.getJson);
   }
 
-
-
+  setHeaders(headers) {
+    Object.keys(headers)
+      .forEach(header => this.headers.set(header, headers[header]))
+  }
 }
 
